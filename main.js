@@ -92,6 +92,24 @@ function authenticateUser(req, res, next)
 }
 
 /**
+ * Middleware to check if user is admin.
+ */
+function authenticateAdmin(req, res, next)
+{
+    if(req.session.user_type !== 'admin')
+    {
+        res.status(403);
+
+        return res.render('403',
+        {
+            error: "ADMINS ONLY! you dont have perms here."
+        });
+    }
+
+    next();
+}
+
+/**
  * Main page AKA "Home page".
  * 
  * uses req to send JSON data to client side
@@ -216,28 +234,21 @@ app.post('/login', async(req,res) =>
     }
 });
 
-app.get('/admin', authenticateUser, async (req, res) => 
+app.get('/admin', authenticateUser, authenticateAdmin, async (req, res) => 
 {
-    if(req.session.user_type !== 'admin')
-    {
-        //for rendering a page with personal error message
-        res.status(403);
-        res.render("403", {error: "ADMINS ONLY! you dont have perms here."});
-        return
-    }
     //find users.. put them in array.. pass that array in the admin page render
     const usersArray = await userCollection.find().project({name: 1, user_type: 1}).toArray();
     res.render('admin', {users: usersArray});
 });
 
-app.post('/promote', authenticateUser, async (req, res) => 
+app.post('/promote', authenticateUser, authenticateAdmin, async (req, res) => 
 {
     const username = req.body.name;
     await userCollection.updateOne({name: username}, {$set: {user_type: 'admin'}});
     res.redirect('/admin');
 });
 
-app.post('/demote', authenticateUser, async (req, res) => 
+app.post('/demote', authenticateUser, authenticateAdmin, async (req, res) => 
 {
     const username = req.body.name;
     await userCollection.updateOne({name: username}, {$set: {user_type: 'user'}});
