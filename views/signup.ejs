@@ -1,0 +1,20 @@
+<%- include('templates/header') %>
+
+<h1>Sign up</h1>
+<form action="/signup" method="post" style="max-width: 400px;">
+    <div class="mb-3">
+        <label class="form-label">Name</label>
+        <input name="name" type="text" class="form-control" placeholder="Name Here">
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input name="email" type="email" class="form-control" placeholder="Email Here">
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Password</label>
+        <input name="password" type="password" class="form-control" placeholder="Password Here">
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<%- include('templates/footer') %>

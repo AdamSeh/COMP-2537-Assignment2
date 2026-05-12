@@ -1,0 +1,21 @@
+<%- include('templates/header') %>
+
+<h1>Hi and Welcome</h1>
+
+<% if (!authenticated) 
+    { %>
+        <div class="d-grid gap-2 d-md-block">
+            <a href="/signup" class="btn btn-primary">Sign upp</a>
+            <a href="/login" class="btn btn-secondary">Login</a>
+        </div>
+ <% } 
+    else 
+    { %>
+        <p>Hi there, <%= name %>!</p>
+        <div class="d-grid gap-2 d-md-block">
+            <a href="/members" class="btn btn-info">To members area</a>
+            <a href="/logout" class="btn btn-outline-danger">Logout</a>
+        </div>
+ <% } %>
+
+ <%- include('templates/footer') %>
